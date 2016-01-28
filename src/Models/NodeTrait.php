@@ -48,6 +48,14 @@ trait NodeTrait {
 	/**
 	 * @return int
 	 */
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	/**
+	 * @return int
+	 */
 	public function getDepth()
 	{
 		return $this->depth ?: $this->countAncestors();
