@@ -1,0 +1,29 @@
+{
+	"name": "exolnet/laravel-closure-table",
+	"description": "Closure Table database design pattern implementation for Laravel framework.",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Alexandre D'Eschambeault",
+			"email": "adeschambeault@exolnet.com"
+		},
+		{
+			"name": "Tom Rochette",
+			"email": "trochette@exolnet.com"
+		}
+	],
+	"require": {
+		"php": ">=5.6.0",
+		"laravel/framework": ">=4.2"
+	},
+	"require-dev": {
+		"phpspec/phpspec": "~2.0",
+		"phpunit/phpunit": "~4.0",
+		"mockery/mockery": "~0.9"
+	},
+	"autoload": {
+		"psr-4": {
+			"Exolnet\\ClosureTable\\": "src/"
+		}
+	}
+}
