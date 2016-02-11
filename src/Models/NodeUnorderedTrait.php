@@ -108,7 +108,7 @@ trait NodeUnorderedTrait {
 	 * @param \Exolnet\ClosureTable\Models\NodeInterface $ofNode
 	 * @return $this
 	 */
-	protected function insertAs(callable $callback_name, NodeInterface $ofNode)
+	protected function insertAs($callback_name, NodeInterface $ofNode)
 	{
 		if ( ! $this->save()) {
 			return false;
