@@ -111,7 +111,7 @@ trait NodeTrait {
 	 */
 	public function getPath()
 	{
-		return $this->path()->get();
+		return $this->path;
 	}
 
 	/**
@@ -119,7 +119,7 @@ trait NodeTrait {
 	 */
 	public function countPath()
 	{
-		return $this->path()->count();
+		return $this->getPath()->count();
 	}
 
 	/**
@@ -140,7 +140,7 @@ trait NodeTrait {
 	 */
 	public function getSubtree()
 	{
-		return $this->subtree()->get();
+		return $this->subtree;
 	}
 
 	/**
@@ -148,7 +148,7 @@ trait NodeTrait {
 	 */
 	public function countSubtree()
 	{
-		return $this->subtree()->count();
+		return $this->getSubtree()->count();
 	}
 
 	/**
@@ -164,7 +164,7 @@ trait NodeTrait {
 	 */
 	public function getAncestors()
 	{
-		return $this->ancestors()->get();
+		return $this->ancestors;
 	}
 
 	/**
@@ -226,7 +226,7 @@ trait NodeTrait {
 	 */
 	public function getDescendants()
 	{
-		return $this->descendants()->get();
+		return $this->descendants;
 	}
 
 	/**
@@ -234,7 +234,7 @@ trait NodeTrait {
 	 */
 	public function countDescendants()
 	{
-		return $this->descendants()->count();
+		return $this->getDescendants()->count();
 	}
 
 	/**
@@ -266,7 +266,7 @@ trait NodeTrait {
 	 */
 	public function getChildren()
 	{
-		return $this->children()->get();
+		return $this->children;
 	}
 
 	/**
@@ -274,7 +274,7 @@ trait NodeTrait {
 	 */
 	public function countChildren()
 	{
-		return $this->children()->count();
+		return $this->getChildren()->count();
 	}
 
 	/**
@@ -304,7 +304,7 @@ trait NodeTrait {
 	 */
 	public function getNeighbourhood()
 	{
-		return $this->neighbourhood()->get();
+		return $this->neighbourhood;
 	}
 
 	/**
@@ -312,7 +312,7 @@ trait NodeTrait {
 	 */
 	public function countNeighbourhood()
 	{
-		return $this->neighbourhood()->count();
+		return $this->getNeighbourhood()->count();
 	}
 
 	/**
@@ -341,7 +341,7 @@ trait NodeTrait {
 	 */
 	public function getSiblings()
 	{
-		return $this->siblings()->get();
+		return $this->siblings;
 	}
 
 	/**
@@ -349,7 +349,7 @@ trait NodeTrait {
 	 */
 	public function countSiblings()
 	{
-		return $this->siblings()->count();
+		return $this->getSiblings()->count();
 	}
 
 	/**

@@ -1,7 +1,28 @@
 <?php namespace Exolnet\ClosureTable\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 trait NodeQueryTrait
 {
+	/**
+	 * @param mixed $values
+	 * @return array
+	 */
+	protected function buildRelatedIds($values)
+	{
+		if ( ! is_array($values)) {
+			$values = [$values];
+		}
+
+		return array_map(function($value) {
+			if ($value instanceof Model) {
+				return $value->getKey();
+			}
+
+			return $value;
+		}, $values);
+	}
+
 	/**
 	 * @param \Illuminate\Database\Eloquent\Builder $query
 	 * @return \Illuminate\Database\Eloquent\Builder
@@ -27,12 +48,8 @@ trait NodeQueryTrait
 	 */
 	public function scopeWhereDescendantOf($query, $values)
 	{
-		if ( ! is_array($values)) {
-			$values = [$values];
-		}
-
 		return $query->whereHas('path', function ($query) use ($values) {
-			$query->whereIn($this->getClosureAncestorColumn(), $values);
+			$query->whereIn($this->getClosureAncestorColumn(), $this->buildRelatedIds($values));
 		});
 	}
 
@@ -43,12 +60,8 @@ trait NodeQueryTrait
 	 */
 	public function scopeWhereNotDescendantOf($query, $values)
 	{
-		if ( ! is_array($values)) {
-			$values = [$values];
-		}
-
 		return $query->whereHas('path', function ($query) use ($values) {
-			$query->whereIn($this->getClosureAncestorColumn(), $values);
+			$query->whereIn($this->getClosureAncestorColumn(), $this->buildRelatedIds($values));
 		}, '=', 0);
 	}
 
@@ -59,12 +72,8 @@ trait NodeQueryTrait
 	 */
 	public function scopeWhereAncestorOf($query, $values)
 	{
-		if ( ! is_array($values)) {
-			$values = [$values];
-		}
-
 		return $query->whereHas('subtree', function ($query) use ($values) {
-			$query->whereIn($this->getClosureDescendantColumn(), $values);
+			$query->whereIn($this->getClosureDescendantColumn(), $this->buildRelatedIds($values));
 		});
 	}
 
@@ -75,12 +84,8 @@ trait NodeQueryTrait
 	 */
 	public function scopeWhereNotAncestorOf($query, $values)
 	{
-		if ( ! is_array($values)) {
-			$values = [$values];
-		}
-
 		return $query->whereHas('subtree', function ($query) use ($values) {
-			$query->whereIn($this->getClosureDescendantColumn(), $values);
+			$query->whereIn($this->getClosureDescendantColumn(), $this->buildRelatedIds($values));
 		}, '=', 0);
 	}
 
@@ -91,9 +96,7 @@ trait NodeQueryTrait
 	 */
 	public function scopeWherePartOf($query, $values)
 	{
-		if ( ! is_array($values)) {
-			$values = [$values];
-		}
+		$values = $this->buildRelatedIds($values);
 
 		return $query->where(function($query) use ($values)  {
 			$query->where(function ($query) use ($values) {
@@ -111,9 +114,7 @@ trait NodeQueryTrait
 	 */
 	public function scopeWhereNotPartOf($query, $values)
 	{
-		if ( ! is_array($values)) {
-			$values = [$values];
-		}
+		$values = $this->buildRelatedIds($values);
 
 		return $query->where(function($query) use ($values)  {
 			$query->where(function ($query) use ($values) {
@@ -242,14 +243,5 @@ trait NodeQueryTrait
 	public function scopeWithoutChildrenOf($query, NodeInterface $node)
 	{
 		$this->scopeHasTreeRelationOf($query, 'parent', 'ancestor', $node, '<');
-	}
-
-	/**
-	 * @param \Illuminate\Database\Eloquent\Builder $query
-	 * @param string $alias
-	 */
-	public function scopeSelectBreadcrumb($query, $alias = 'breadcrumb')
-	{
-		# code...
 	}
 }
