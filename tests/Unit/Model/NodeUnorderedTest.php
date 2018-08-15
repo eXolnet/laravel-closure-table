@@ -1,23 +1,25 @@
 <?php
 
+namespace Exolnet\ClosureTable\Tests\Unit\Model;
+
 use Exolnet\ClosureTable\Models\NodeUnordered;
+use Exolnet\ClosureTable\Tests\Mocks\NodeMock;
+use Exolnet\ClosureTable\Tests\Unit\UnitTest;
 
-require __DIR__.'/../../mocks/NodeMock.php';
-
-class NodeUnorderedTest extends \PHPUnit_Framework_TestCase
+class NodeUnorderedTest extends UnitTest
 {
-	/**
-	 * @var \NodeMock
-	 */
-	protected $model;
+    /**
+     * @var \Exolnet\ClosureTable\Tests\Mocks\NodeMock
+     */
+    protected $model;
 
-	public function setUp()
-	{
-		$this->model = new NodeMock();
-	}
+    public function setUp()
+    {
+        $this->model = new NodeMock();
+    }
 
-	public function testItIsInitializable()
-	{
-		$this->assertInstanceOf(NodeUnordered::class, $this->model);
-	}
+    public function testItIsInitializable()
+    {
+        $this->assertInstanceOf(NodeUnordered::class, $this->model);
+    }
 }

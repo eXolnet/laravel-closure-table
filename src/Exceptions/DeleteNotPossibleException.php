@@ -1,5 +1,6 @@
 <?php namespace Exolnet\ClosureTable\Exceptions;
 
-class DeleteNotPossibleException extends ClosureTableException {
+class DeleteNotPossibleException extends ClosureTableException
+{
 
 }

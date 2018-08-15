@@ -1,5 +1,6 @@
 <?php namespace Exolnet\ClosureTable\Exceptions;
 
-class SameNodeException extends ClosureTableException  {
+class SameNodeException extends ClosureTableException
+{
 
 }

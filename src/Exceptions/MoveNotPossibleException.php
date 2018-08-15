@@ -1,5 +1,6 @@
 <?php namespace Exolnet\ClosureTable\Exceptions;
 
-class MoveNotPossibleException extends ClosureTableException {
+class MoveNotPossibleException extends ClosureTableException
+{
 
 }
