@@ -1,29 +1,50 @@
 {
-	"name": "exolnet/laravel-closure-table",
-	"description": "Closure Table database design pattern implementation for Laravel framework.",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Alexandre D'Eschambeault",
-			"email": "adeschambeault@exolnet.com"
-		},
-		{
-			"name": "Tom Rochette",
-			"email": "trochette@exolnet.com"
-		}
-	],
-	"require": {
-		"php": ">=5.6.0",
-		"laravel/framework": ">=4.2"
-	},
-	"require-dev": {
-		"phpspec/phpspec": "~2.0",
-		"phpunit/phpunit": "~4.0",
-		"mockery/mockery": "~0.9"
-	},
-	"autoload": {
-		"psr-4": {
-			"Exolnet\\ClosureTable\\": "src/"
-		}
-	}
+    "name": "exolnet/laravel-closure-table",
+    "description": "Closure Table database design pattern implementation for Laravel framework.",
+    "keywords": [
+        "exolnet",
+        "laravel",
+        "closure-table"
+    ],
+    "homepage": "https://github.com/eXolnet/laravel-closure-table",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexandre D'Eschambeault",
+            "email": "adeschambeault@exolnet.com"
+        },
+        {
+            "name": "Tom Rochette",
+            "email": "trochette@exolnet.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "laravel/framework": "5.5.*|5.6.*"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^6.0",
+        "orchestra/testbench" : "^3.5",
+        "squizlabs/php_codesniffer": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Exolnet\\ClosureTable\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Exolnet\\ClosureTable\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "lint": "vendor/bin/phpcs -p --standard=PSR2 src tests",
+        "lint-fix": "vendor/bin/phpcbf -p --standard=PSR2 src tests",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    }
 }
