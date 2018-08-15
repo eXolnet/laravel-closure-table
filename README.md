@@ -1,4 +1,4 @@
-# laravel-closure-table
+# Laravel Closure Table
 
 [![Latest Stable Version](https://poser.pugx.org/eXolnet/laravel-closure-table/v/stable?format=flat-square)](https://packagist.org/packages/eXolnet/laravel-closure-table)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
