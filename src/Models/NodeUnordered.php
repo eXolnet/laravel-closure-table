@@ -1,10 +1,15 @@
-<?php namespace Exolnet\ClosureTable\Models;
+<?php
 
+namespace Exolnet\ClosureTable\Models;
+
+use Exolnet\ClosureTable\Contracts\NodeUnorderedInterface;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class NodeUnordered extends Model implements NodeUnorderedInterface
 {
-    use NodeTrait, NodeQueryTrait, NodeUnorderedTrait;
+    use NodeTrait;
+    use NodeQueryTrait;
+    use NodeUnorderedTrait;
 
     /**
      * The table use for the closure relation.

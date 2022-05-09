@@ -1,4 +1,6 @@
-<?php namespace Exolnet\ClosureTable\Models;
+<?php
+
+namespace Exolnet\ClosureTable\Models;
 
 use Exolnet\ClosureTable\Exceptions\DeleteNotPossibleException;
 
@@ -185,7 +187,7 @@ trait NodeTrait
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model|\Exolnet\ClosureTable\Models\NodeInterface
+     * @return \Illuminate\Database\Eloquent\Model|\Exolnet\ClosureTable\Contracts\NodeInterface
      */
     public function getParent()
     {
@@ -205,7 +207,7 @@ trait NodeTrait
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model|\Exolnet\ClosureTable\Models\NodeInterface
+     * @return \Illuminate\Database\Eloquent\Model|\Exolnet\ClosureTable\Contracts\NodeInterface
      */
     public function getRoot()
     {
@@ -367,7 +369,7 @@ trait NodeTrait
     public function delete()
     {
         if ($this->hasChildren()) {
-            throw new DeleteNotPossibleException;
+            throw new DeleteNotPossibleException();
         }
 
         return parent::delete();
@@ -420,7 +422,7 @@ trait NodeTrait
      */
     public static function roots()
     {
-        $instance = new static;
+        $instance = new static();
 
         return $instance->newQuery()->whereIsRoot();
     }
@@ -454,7 +456,7 @@ trait NodeTrait
      */
     public static function leaves()
     {
-        $instance = new static;
+        $instance = new static();
 
         return $instance->newQuery()->isLeaf();
     }

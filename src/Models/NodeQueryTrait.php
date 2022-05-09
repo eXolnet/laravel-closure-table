@@ -1,5 +1,8 @@
-<?php namespace Exolnet\ClosureTable\Models;
+<?php
 
+namespace Exolnet\ClosureTable\Models;
+
+use Exolnet\ClosureTable\Contracts\NodeInterface;
 use Illuminate\Database\Eloquent\Model;
 
 trait NodeQueryTrait
@@ -140,7 +143,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param $relation
      * @param $column
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      * @param string $operator
      * @param int $count
      */
@@ -152,7 +155,7 @@ trait NodeQueryTrait
         $operator = '>=',
         $count = 1
     ) {
-        $column_getter = 'getClosure'.ucfirst($column).'Column';
+        $column_getter = 'getClosure' . ucfirst($column) . 'Column';
         $column = $this->$column_getter();
 
         $query->whereHas($relation, function ($query) use ($column, $node) {
@@ -162,7 +165,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithSubtreeOf($query, NodeInterface $node)
     {
@@ -171,7 +174,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithDescendantOf($query, NodeInterface $node)
     {
@@ -180,7 +183,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithPathOf($query, NodeInterface $node)
     {
@@ -189,7 +192,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithAncestorOf($query, NodeInterface $node)
     {
@@ -198,7 +201,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithChildrenOf($query, NodeInterface $node)
     {
@@ -207,7 +210,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithoutSubtreeOf($query, NodeInterface $node)
     {
@@ -216,7 +219,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithoutDescendantOf($query, NodeInterface $node)
     {
@@ -225,7 +228,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithoutPathOf($query, NodeInterface $node)
     {
@@ -234,7 +237,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithoutAncestorOf($query, NodeInterface $node)
     {
@@ -243,7 +246,7 @@ trait NodeQueryTrait
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Exolnet\ClosureTable\Models\NodeInterface $node
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
     public function scopeWithoutChildrenOf($query, NodeInterface $node)
     {

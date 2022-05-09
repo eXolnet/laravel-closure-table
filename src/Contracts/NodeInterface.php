@@ -1,4 +1,6 @@
-<?php namespace Exolnet\ClosureTable\Models;
+<?php
+
+namespace Exolnet\ClosureTable\Contracts;
 
 interface NodeInterface
 {
