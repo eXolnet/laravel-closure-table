@@ -3,5 +3,8 @@ composer.phar
 composer.lock
 .DS_Store
 .idea/
+.phpunit.result.cache
+.phpstorm.meta.php
+.php_cs.cache
 phpunit.xml
 Thumbs.db
