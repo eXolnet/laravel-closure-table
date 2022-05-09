@@ -13,7 +13,7 @@ class NodeUnorderedTest extends UnitTest
      */
     protected $model;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->model = new NodeMock();
     }
