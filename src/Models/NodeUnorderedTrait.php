@@ -93,6 +93,8 @@ trait NodeUnorderedTrait
 
         \DB::statement($query);
 
+        $this->refresh();
+
         return $this;
     }
 
@@ -122,6 +124,10 @@ trait NodeUnorderedTrait
         }
 
         $this->$callback_name($ofNode);
+
+        $ofNode->refresh();
+
+        $this->refresh();
 
         return $this;
     }
@@ -234,6 +240,6 @@ trait NodeUnorderedTrait
             $child->moveAsSiblingOf($this);
         }
 
-        return $this;
+        return $this->refresh();
     }
 }
