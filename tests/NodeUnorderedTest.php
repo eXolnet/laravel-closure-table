@@ -583,19 +583,4 @@ class NodeUnorderedTest extends TestCase
         $this->assertEquals($nodes[2]->id, $node->parent()->first()->id);
         $node->children()->first();
     }
-
-    public function testInsertAsParentOf()
-    {
-        $nodes = $this->generateTree();
-        $node = new NodeMock();
-        $node->save();
-
-        $this->assertFalse($node->hasChildren());
-        $this->assertFalse($nodes[1]->hasParent());
-
-        $node->insertAsParentOf($nodes[1]);
-
-        $this->assertTrue($node->hasChildren());
-        $this->assertTrue($nodes[1]->hasParent());
-    }
 }
