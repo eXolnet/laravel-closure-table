@@ -343,7 +343,7 @@ class NodeUnorderedTest extends TestCase
     private function assertParent($expected, $node)
     {
         $parent = $node->getParent();
-        $actual = $parent?->getKey();
+        $actual = $parent !== null ? $parent->getKey() : null;
 
         $this->assertEquals($expected, $actual);
 
@@ -369,7 +369,7 @@ class NodeUnorderedTest extends TestCase
     private function assertRoot($expected, $node)
     {
         $root = $node->getRoot();
-        $actual = $root?->getKey();
+        $actual = $root !== null ? $root->getKey() : null;
 
         $this->assertEquals($expected, $actual);
     }
