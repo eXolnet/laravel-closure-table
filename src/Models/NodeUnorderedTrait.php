@@ -3,9 +3,11 @@
 namespace Exolnet\ClosureTable\Models;
 
 use Exolnet\ClosureTable\Contracts\NodeInterface;
+use Exolnet\ClosureTable\Contracts\NodeUnorderedInterface;
 use Exolnet\ClosureTable\Exceptions\ClosureTableException;
 use Exolnet\ClosureTable\Exceptions\MoveNotPossibleException;
 use Exolnet\ClosureTable\Exceptions\SameNodeException;
+use Illuminate\Support\Facades\DB;
 
 trait NodeUnorderedTrait
 {
@@ -13,10 +15,10 @@ trait NodeUnorderedTrait
      * Remove all relations from the node and it's descendants with the
      * ancestors to make it a root node.
      *
-     * @return $this
+     * @return $this|null
      * @todo   Could optimize queries (three queries into one).
      */
-    public function makeRoot()
+    public function makeRoot(): ?NodeUnorderedInterface
     {
         if (! $this->exists) {
             throw new MoveNotPossibleException();
@@ -44,7 +46,7 @@ trait NodeUnorderedTrait
     /**
      * @return $this
      */
-    public function insertAsRoot()
+    public function insertAsRoot(): NodeUnorderedInterface
     {
         if (! $this->save()) {
             throw new ClosureTableException('Unable to save to node.');
@@ -59,10 +61,10 @@ trait NodeUnorderedTrait
      * ancestors. Secondly, it create all relations from the new ancestors with
      * the node and its descendants.
      *
-     * @param  \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
-     * @return $this
+     * @param \Exolnet\ClosureTable\Contracts\NodeUnorderedInterface $ofNode
+     * @return \Exolnet\ClosureTable\Contracts\NodeUnorderedInterface
      */
-    public function moveAsChildOf(NodeInterface $ofNode)
+    public function moveAsChildOf(NodeUnorderedInterface $ofNode): NodeUnorderedInterface
     {
         if (! $this->exists || ! $ofNode->exists) {
             throw new MoveNotPossibleException();
@@ -91,7 +93,7 @@ trait NodeUnorderedTrait
 			AND subtbl.{$ancestor} = {$descendantId}
 			";
 
-        \DB::statement($query);
+        DB::statement($query);
 
         $this->refresh();
 
@@ -113,11 +115,11 @@ trait NodeUnorderedTrait
     }
 
     /**
-     * @param callable $callback_name
+     * @param string $callback_name
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
-     * @return $this
+     * @return bool|$this
      */
-    protected function insertAs($callback_name, NodeInterface $ofNode)
+    protected function insertAs(string $callback_name, NodeInterface $ofNode)
     {
         if (! $this->save()) {
             return false;
@@ -136,35 +138,35 @@ trait NodeUnorderedTrait
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function insertAsChildOf(NodeInterface $ofNode)
+    public function insertAsChildOf(NodeInterface $ofNode): NodeUnorderedInterface
     {
         return $this->insertAs('moveAsChildOf', $ofNode);
     }
 
     /**
-     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
-     * @return $this
+     * @param \Exolnet\ClosureTable\Contracts\NodeUnorderedInterface $ofNode
+     * @return \Exolnet\ClosureTable\Contracts\NodeUnorderedInterface
      */
-    public function moveAsParentOf(NodeInterface $ofNode)
+    public function moveAsParentOf(NodeUnorderedInterface $ofNode): NodeUnorderedInterface
     {
         $this->moveAsSiblingOf($ofNode);
-        return $ofNode->moveAsChild($this);
+        return $ofNode->moveAsChildOf($this);
     }
 
     /**
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function insertAsParentOf(NodeInterface $ofNode)
+    public function insertAsParentOf(NodeInterface $ofNode): NodeUnorderedInterface
     {
         return $this->insertAs('moveAsParentOf', $ofNode);
     }
 
     /**
-     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
+     * @param \Exolnet\ClosureTable\Contracts\NodeUnorderedInterface $ofNode
      * @return $this
      */
-    public function moveAsSiblingOf(NodeInterface $ofNode)
+    public function moveAsSiblingOf(NodeUnorderedInterface $ofNode): NodeUnorderedInterface
     {
         $parent = $ofNode->getParent();
 
@@ -179,7 +181,7 @@ trait NodeUnorderedTrait
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function insertAsSiblingOf(NodeInterface $ofNode)
+    public function insertAsSiblingOf(NodeInterface $ofNode): NodeUnorderedInterface
     {
         return $this->insertAs('moveAsSiblingOf', $ofNode);
     }
@@ -188,7 +190,7 @@ trait NodeUnorderedTrait
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function moveAsRootOf(NodeInterface $ofNode)
+    public function moveAsRootOf(NodeInterface $ofNode): NodeUnorderedInterface
     {
         $root = $ofNode->getRoot();
 
@@ -203,7 +205,7 @@ trait NodeUnorderedTrait
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function insertAsRootOf(NodeInterface $ofNode)
+    public function insertAsRootOf(NodeInterface $ofNode): NodeUnorderedInterface
     {
         return $this->insertAs('moveAsRootOf', $ofNode);
     }
@@ -211,7 +213,7 @@ trait NodeUnorderedTrait
     /**
      * @return $this
      */
-    public function pullUp()
+    public function pullUp(): NodeUnorderedInterface
     {
         $parent = $this->getParent();
 
@@ -226,7 +228,7 @@ trait NodeUnorderedTrait
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofChild
      * return $this
      */
-    public function pushDown(NodeInterface $ofChild)
+    public function pushDown(NodeInterface $ofChild): NodeUnorderedInterface
     {
         return $ofChild->moveAsParentOf($this);
     }
@@ -234,7 +236,7 @@ trait NodeUnorderedTrait
     /**
      * @return $this
      */
-    public function extractChildren()
+    public function extractChildren(): NodeUnorderedInterface
     {
         foreach ($this->getChildren() as $child) {
             $child->moveAsSiblingOf($this);

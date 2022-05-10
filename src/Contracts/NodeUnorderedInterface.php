@@ -7,45 +7,45 @@ interface NodeUnorderedInterface extends NodeInterface
     /**
      * @return $this
      */
-    public function makeRoot();
+    public function makeRoot(): ?NodeUnorderedInterface;
 
     /**
      * @return $this
      */
-    public function extractChildren();
+    public function extractChildren(): NodeUnorderedInterface;
+
+    /**
+     * @param \Exolnet\ClosureTable\Contracts\NodeUnorderedInterface $ofNode
+     * @return $this
+     */
+    public function moveAsParentOf(NodeUnorderedInterface $ofNode): NodeUnorderedInterface;
+
+    /**
+     * @param \Exolnet\ClosureTable\Contracts\NodeUnorderedInterface $ofNode
+     * @return $this
+     */
+    public function moveAsChildOf(NodeUnorderedInterface $ofNode): NodeUnorderedInterface;
+
+    /**
+     * @param \Exolnet\ClosureTable\Contracts\NodeUnorderedInterface $ofNode
+     * @return $this
+     */
+    public function moveAsSiblingOf(NodeUnorderedInterface $ofNode): NodeUnorderedInterface;
 
     /**
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function moveAsParentOf(NodeInterface $ofNode);
-
-    /**
-     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
-     * @return $this
-     */
-    public function moveAsChildOf(NodeInterface $ofNode);
-
-    /**
-     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
-     * @return $this
-     */
-    public function moveAsSiblingOf(NodeInterface $ofNode);
-
-    /**
-     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
-     * @return $this
-     */
-    public function moveAsRootOf(NodeInterface $ofNode);
+    public function moveAsRootOf(NodeInterface $ofNode): NodeUnorderedInterface;
 
     /**
      * @return $this
      */
-    public function pullUp();
+    public function pullUp(): NodeUnorderedInterface;
 
     /**
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofChild
      * @return $this
      */
-    public function pushDown(NodeInterface $ofChild);
+    public function pushDown(NodeInterface $ofChild): NodeUnorderedInterface;
 }

@@ -6,5 +6,5 @@ use Exolnet\ClosureTable\Models\NodeUnordered;
 
 class NodeMock extends NodeUnordered
 {
-    protected $closure_table = 'node_mock_closures';
+    protected string $closure_table = 'node_mock_closures';
 }

@@ -16,35 +16,35 @@ abstract class NodeUnordered extends Model implements NodeUnorderedInterface
      *
      * @var string
      */
-    protected $closure_table;
+    protected string $closure_table;
 
     /**
      * The ancestor column use for the closure relation.
      *
      * @var string
      */
-    protected $closure_ancestor_column = 'ancestor_id';
+    protected string $closure_ancestor_column = 'ancestor_id';
 
     /**
      * The descendant column use for the closure relation.
      *
      * @var string
      */
-    protected $closure_descendant_column = 'descendant_id';
+    protected string $closure_descendant_column = 'descendant_id';
 
     /**
      * The depth column use for the closure relation.
      *
      * @var string
      */
-    protected $closure_depth_column = 'depth';
+    protected string $closure_depth_column = 'depth';
 
     /**
      * The "booting" method of the model.
      *
      * @return void
      */
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
 

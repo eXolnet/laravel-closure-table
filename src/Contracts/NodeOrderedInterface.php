@@ -7,52 +7,52 @@ interface NodeOrderedInterface extends NodeInterface
     /**
      * @return $this
      */
-    public function makeFirstRoot();
+    public function makeFirstRoot(): NodeOrderedInterface;
 
     /**
      * @return $this
      */
-    public function makeLastRoot();
-
-    /**
-     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
-     * @return $this
-     */
-    public function moveAsParent(NodeInterface $ofNode);
+    public function makeLastRoot(): NodeOrderedInterface;
 
     /**
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function moveAsFirstChild(NodeInterface $ofNode);
+    public function moveAsParent(NodeInterface $ofNode): NodeOrderedInterface;
 
     /**
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function moveAsLastChild(NodeInterface $ofNode);
+    public function moveAsFirstChild(NodeInterface $ofNode): NodeOrderedInterface;
+
+    /**
+     * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
+     * @return $this
+     */
+    public function moveAsLastChild(NodeInterface $ofNode): NodeOrderedInterface;
 
     /**
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      * @return $this
      */
-    public function moveBefore(NodeInterface $node);
+    public function moveBefore(NodeInterface $node): NodeOrderedInterface;
 
     /**
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      * @return $this
      */
-    public function moveAfter(NodeInterface $node);
+    public function moveAfter(NodeInterface $node): NodeOrderedInterface;
 
     /**
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function moveAsFirstSibling(NodeInterface $ofNode);
+    public function moveAsFirstSibling(NodeInterface $ofNode): NodeOrderedInterface;
 
     /**
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $ofNode
      * @return $this
      */
-    public function moveAsLastSibling(NodeInterface $ofNode);
+    public function moveAsLastSibling(NodeInterface $ofNode): NodeOrderedInterface;
 }

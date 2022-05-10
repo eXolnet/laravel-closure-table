@@ -3,6 +3,7 @@
 namespace Exolnet\ClosureTable\Models;
 
 use Exolnet\ClosureTable\Contracts\NodeInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 trait NodeQueryTrait
@@ -11,7 +12,7 @@ trait NodeQueryTrait
      * @param mixed $values
      * @return array
      */
-    protected function buildRelatedIds($values)
+    protected function buildRelatedIds($values): array
     {
         if (! is_array($values)) {
             $values = [$values];
@@ -30,7 +31,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWhereIsRoot($query)
+    public function scopeWhereIsRoot(Builder $query): Builder
     {
         return $query->has('path', '=', 1);
     }
@@ -39,7 +40,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeIsLeaf($query)
+    public function scopeIsLeaf(Builder $query): Builder
     {
         return $query->has('subtree', '=', 1);
     }
@@ -49,9 +50,9 @@ trait NodeQueryTrait
      * @param mixed $values
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWhereDescendantOf($query, $values)
+    public function scopeWhereDescendantOf(Builder $query, $values): Builder
     {
-        return $query->whereHas('path', function ($query) use ($values) {
+        return $query->whereHas('path', function (Builder $query) use ($values) {
             $query->whereIn($this->getClosureAncestorColumn(), $this->buildRelatedIds($values));
         });
     }
@@ -61,9 +62,9 @@ trait NodeQueryTrait
      * @param mixed $values
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWhereNotDescendantOf($query, $values)
+    public function scopeWhereNotDescendantOf(Builder $query, $values): Builder
     {
-        return $query->whereHas('path', function ($query) use ($values) {
+        return $query->whereHas('path', function (Builder $query) use ($values) {
             $query->whereIn($this->getClosureAncestorColumn(), $this->buildRelatedIds($values));
         }, '=', 0);
     }
@@ -73,9 +74,9 @@ trait NodeQueryTrait
      * @param mixed $values
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWhereAncestorOf($query, $values)
+    public function scopeWhereAncestorOf(Builder $query, $values): Builder
     {
-        return $query->whereHas('subtree', function ($query) use ($values) {
+        return $query->whereHas('subtree', function (Builder $query) use ($values) {
             $query->whereIn($this->getClosureDescendantColumn(), $this->buildRelatedIds($values));
         });
     }
@@ -85,9 +86,9 @@ trait NodeQueryTrait
      * @param mixed $values
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWhereNotAncestorOf($query, $values)
+    public function scopeWhereNotAncestorOf(Builder $query, $values): Builder
     {
-        return $query->whereHas('subtree', function ($query) use ($values) {
+        return $query->whereHas('subtree', function (Builder $query) use ($values) {
             $query->whereIn($this->getClosureDescendantColumn(), $this->buildRelatedIds($values));
         }, '=', 0);
     }
@@ -97,14 +98,14 @@ trait NodeQueryTrait
      * @param mixed $values
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWherePartOf($query, $values)
+    public function scopeWherePartOf(Builder $query, $values): Builder
     {
         $values = $this->buildRelatedIds($values);
 
-        return $query->where(function ($query) use ($values) {
-            $query->where(function ($query) use ($values) {
+        return $query->where(function (Builder $query) use ($values) {
+            $query->where(function (Builder $query) use ($values) {
                 $query->whereDescendantOf($values);
-            })->orWhere(function ($query) use ($values) {
+            })->orWhere(function (Builder $query) use ($values) {
                 $query->whereAncestorOf($values);
             });
         });
@@ -115,14 +116,14 @@ trait NodeQueryTrait
      * @param mixed $values
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWhereNotPartOf($query, $values)
+    public function scopeWhereNotPartOf(Builder $query, $values): Builder
     {
         $values = $this->buildRelatedIds($values);
 
-        return $query->where(function ($query) use ($values) {
-            $query->where(function ($query) use ($values) {
+        return $query->where(function (Builder $query) use ($values) {
+            $query->where(function (Builder $query) use ($values) {
                 $query->whereNotDescendantOf($values);
-            })->where(function ($query) use ($values) {
+            })->where(function (Builder $query) use ($values) {
                 $query->whereNotAncestorOf($values);
             });
         });
@@ -132,9 +133,9 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWithoutRoot($query)
+    public function scopeWithoutRoot(Builder $query): Builder
     {
-        return $query->whereHas('path', function ($query) {
+        return $query->whereHas('path', function (Builder $query) {
             return $query->where($this->getClosureDepthColumn(), '!=', 0);
         });
     }
@@ -148,17 +149,17 @@ trait NodeQueryTrait
      * @param int $count
      */
     public function scopeHasTreeRelationOf(
-        $query,
+        Builder $query,
         $relation,
         $column,
         NodeInterface $node,
-        $operator = '>=',
-        $count = 1
-    ) {
+        string $operator = '>=',
+        int $count = 1
+    ): void {
         $column_getter = 'getClosure' . ucfirst($column) . 'Column';
         $column = $this->$column_getter();
 
-        $query->whereHas($relation, function ($query) use ($column, $node) {
+        $query->whereHas($relation, function (Builder $query) use ($column, $node) {
             $query->where($column, '=', $node->getKey());
         }, $operator, $count);
     }
@@ -167,7 +168,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithSubtreeOf($query, NodeInterface $node)
+    public function scopeWithSubtreeOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'path', 'ancestor', $node, '>=');
     }
@@ -176,7 +177,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithDescendantOf($query, NodeInterface $node)
+    public function scopeWithDescendantOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'ancestors', 'ancestor', $node, '>=');
     }
@@ -185,7 +186,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithPathOf($query, NodeInterface $node)
+    public function scopeWithPathOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'subtree', 'descendant', $node, '>=');
     }
@@ -194,7 +195,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithAncestorOf($query, NodeInterface $node)
+    public function scopeWithAncestorOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'descendants', 'descendant', $node, '>=');
     }
@@ -203,7 +204,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithChildrenOf($query, NodeInterface $node)
+    public function scopeWithChildrenOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'parent', 'ancestor', $node, '>=');
     }
@@ -212,7 +213,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithoutSubtreeOf($query, NodeInterface $node)
+    public function scopeWithoutSubtreeOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'path', 'ancestor', $node, '<');
     }
@@ -221,7 +222,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithoutDescendantOf($query, NodeInterface $node)
+    public function scopeWithoutDescendantOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'ancestors', 'ancestor', $node, '<');
     }
@@ -230,7 +231,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithoutPathOf($query, NodeInterface $node)
+    public function scopeWithoutPathOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'subtree', 'descendant', $node, '<');
     }
@@ -239,7 +240,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithoutAncestorOf($query, NodeInterface $node)
+    public function scopeWithoutAncestorOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'descendants', 'descendant', $node, '<');
     }
@@ -248,7 +249,7 @@ trait NodeQueryTrait
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Exolnet\ClosureTable\Contracts\NodeInterface $node
      */
-    public function scopeWithoutChildrenOf($query, NodeInterface $node)
+    public function scopeWithoutChildrenOf(Builder $query, NodeInterface $node)
     {
         $this->scopeHasTreeRelationOf($query, 'parent', 'ancestor', $node, '<');
     }

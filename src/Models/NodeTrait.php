@@ -3,13 +3,19 @@
 namespace Exolnet\ClosureTable\Models;
 
 use Exolnet\ClosureTable\Exceptions\DeleteNotPossibleException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Exolnet\ClosureTable\Models\NodeTrait[] $children
+ */
 trait NodeTrait
 {
     /**
      * @return string
      */
-    public function getClosureModel()
+    public function getClosureModel(): string
     {
         return get_class($this);
     }
@@ -17,7 +23,7 @@ trait NodeTrait
     /**
      * @return string
      */
-    public function getClosureTable()
+    public function getClosureTable(): string
     {
         return $this->closure_table;
     }
@@ -25,7 +31,7 @@ trait NodeTrait
     /**
      * @return string
      */
-    public function getClosureAncestorColumn()
+    public function getClosureAncestorColumn(): string
     {
         return $this->closure_ancestor_column;
     }
@@ -33,7 +39,7 @@ trait NodeTrait
     /**
      * @return string
      */
-    public function getClosureDescendantColumn()
+    public function getClosureDescendantColumn(): string
     {
         return $this->closure_descendant_column;
     }
@@ -41,7 +47,7 @@ trait NodeTrait
     /**
      * @return string
      */
-    public function getClosureDepthColumn()
+    public function getClosureDepthColumn(): string
     {
         return $this->closure_depth_column;
     }
@@ -51,7 +57,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -59,7 +65,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public function getDepth()
+    public function getDepth(): int
     {
         return $this->depth ?: $this->countAncestors();
     }
@@ -67,7 +73,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function isParent()
+    public function isParent(): bool
     {
         return $this->hasChildren();
     }
@@ -75,7 +81,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function isChild()
+    public function isChild(): bool
     {
         return $this->getDepth() > 0;
     }
@@ -83,7 +89,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function isRoot()
+    public function isRoot(): bool
     {
         return $this->getDepth() === 0;
     }
@@ -91,7 +97,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function isLeaf()
+    public function isLeaf(): bool
     {
         return !$this->hasChildren();
     }
@@ -99,7 +105,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function path()
+    public function path(): BelongsToMany
     {
         return $this->belongsToMany(
             $this->getClosureModel(),
@@ -112,7 +118,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getPath()
+    public function getPath(): Collection
     {
         return $this->path;
     }
@@ -120,7 +126,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public function countPath()
+    public function countPath(): int
     {
         return $this->getPath()->count();
     }
@@ -128,7 +134,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function subtree()
+    public function subtree(): BelongsToMany
     {
         return $this->belongsToMany(
             $this->getClosureModel(),
@@ -141,7 +147,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getSubtree()
+    public function getSubtree(): Collection
     {
         return $this->subtree;
     }
@@ -149,7 +155,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public function countSubtree()
+    public function countSubtree(): int
     {
         return $this->getSubtree()->count();
     }
@@ -157,7 +163,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function ancestors()
+    public function ancestors(): BelongsToMany
     {
         return $this->path()->where($this->getClosureDepthColumn(), '>', 0);
     }
@@ -165,7 +171,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAncestors()
+    public function getAncestors(): Collection
     {
         return $this->ancestors;
     }
@@ -173,7 +179,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public function countAncestors()
+    public function countAncestors(): int
     {
         return $this->ancestors()->count();
     }
@@ -181,7 +187,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function hasAncestors()
+    public function hasAncestors(): bool
     {
         return $this->countAncestors() > 0;
     }
@@ -201,7 +207,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function hasParent()
+    public function hasParent(): bool
     {
         return $this->isChild();
     }
@@ -219,7 +225,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function descendants()
+    public function descendants(): BelongsToMany
     {
         return $this->subtree()->where($this->getClosureDepthColumn(), '>', 0);
     }
@@ -227,7 +233,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getDescendants()
+    public function getDescendants(): Collection
     {
         return $this->descendants;
     }
@@ -235,7 +241,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public function countDescendants()
+    public function countDescendants(): int
     {
         return $this->getDescendants()->count();
     }
@@ -243,7 +249,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function hasDescendants()
+    public function hasDescendants(): bool
     {
         return $this->countDescendants() > 0;
     }
@@ -251,7 +257,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function parent()
+    public function parent(): BelongsToMany
     {
         return $this->path()->where($this->getClosureDepthColumn(), '=', 1);
     }
@@ -259,7 +265,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function children()
+    public function children(): BelongsToMany
     {
         return $this->subtree()->where($this->getClosureDepthColumn(), '=', 1);
     }
@@ -267,7 +273,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }
@@ -275,7 +281,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public function countChildren()
+    public function countChildren(): int
     {
         return $this->getChildren()->count();
     }
@@ -283,13 +289,13 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function hasChildren()
+    public function hasChildren(): bool
     {
         return $this->countChildren() > 0;
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function neighbourhood()
     {
@@ -305,7 +311,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getNeighbourhood()
+    public function getNeighbourhood(): Collection
     {
         return $this->neighbourhood()->get();
     }
@@ -313,7 +319,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public function countNeighbourhood()
+    public function countNeighbourhood(): int
     {
         return $this->getNeighbourhood()->count();
     }
@@ -321,13 +327,13 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function hasNeighbourhood()
+    public function hasNeighbourhood(): bool
     {
         return $this->countNeighbourhood() > 0;
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function siblings()
     {
@@ -342,7 +348,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getSiblings()
+    public function getSiblings(): Collection
     {
         return $this->siblings()->get();
     }
@@ -350,7 +356,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public function countSiblings()
+    public function countSiblings(): int
     {
         return $this->getSiblings()->count();
     }
@@ -358,7 +364,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function hasSiblings()
+    public function hasSiblings(): bool
     {
         return $this->countSiblings() > 0;
     }
@@ -366,7 +372,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function delete()
+    public function delete(): bool
     {
         if ($this->hasChildren()) {
             throw new DeleteNotPossibleException();
@@ -378,7 +384,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function deleteKeepDescendants()
+    public function deleteKeepDescendants(): bool
     {
         $this->extractChildren();
 
@@ -388,7 +394,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function deleteSubtree()
+    public function deleteSubtree(): bool
     {
         $ids = $this->getSubtree()->modelKeys();
         $this->newQuery()->whereIn('id', $ids)->delete();
@@ -399,7 +405,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public function deleteDescendants()
+    public function deleteDescendants(): bool
     {
         $ids = $this->getDescendants()->modelKeys();
         $this->newQuery()->whereIn('id', $ids)->delete();
@@ -420,7 +426,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function roots()
+    public static function roots(): Builder
     {
         $instance = new static();
 
@@ -430,7 +436,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public static function getRoots()
+    public static function getRoots(): Collection
     {
         return static::roots()->get();
     }
@@ -438,7 +444,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public static function countRoots()
+    public static function countRoots(): int
     {
         return static::roots()->count();
     }
@@ -446,7 +452,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public static function hasRoots()
+    public static function hasRoots(): bool
     {
         return static::countRoots() > 0;
     }
@@ -454,7 +460,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function leaves()
+    public static function leaves(): Builder
     {
         $instance = new static();
 
@@ -464,7 +470,7 @@ trait NodeTrait
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public static function getLeaves()
+    public static function getLeaves(): Collection
     {
         return static::leaves()->get();
     }
@@ -472,7 +478,7 @@ trait NodeTrait
     /**
      * @return int
      */
-    public static function countLeaves()
+    public static function countLeaves(): int
     {
         return static::leaves()->count();
     }
@@ -480,7 +486,7 @@ trait NodeTrait
     /**
      * @return bool
      */
-    public static function hasLeaves()
+    public static function hasLeaves(): bool
     {
         return static::countLeaves() > 0;
     }
