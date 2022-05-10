@@ -307,7 +307,7 @@ trait NodeTrait
      */
     public function getNeighbourhood()
     {
-        return $this->neighbourhood;
+        return $this->neighbourhood()->get();
     }
 
     /**
@@ -344,7 +344,7 @@ trait NodeTrait
      */
     public function getSiblings()
     {
-        return $this->siblings;
+        return $this->siblings()->get();
     }
 
     /**
