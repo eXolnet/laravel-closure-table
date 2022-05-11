@@ -193,7 +193,7 @@ trait NodeTrait
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model|\Exolnet\ClosureTable\Contracts\NodeInterface
+     * @return $this|null
      */
     public function getParent()
     {
@@ -213,7 +213,7 @@ trait NodeTrait
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model|\Exolnet\ClosureTable\Contracts\NodeInterface
+     * @return $this|null
      */
     public function getRoot()
     {
