@@ -15,11 +15,19 @@ jobs:
         exclude:
           - php: 8.0
             laravel: 10.*
+          - php: 8.2
+            laravel: 9.*
+            dependency-version: prefer-lowest
         include:
           - laravel: 9.*
             testbench: 7.*
           - laravel: 10.*
             testbench: 8.*
+          # Laravel only support PHP 8.2 from v9.43
+          - php: 8.2
+            laravel: ^9.43
+            dependency-version: prefer-lowest
+            testbench: 7.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
