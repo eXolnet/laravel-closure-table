@@ -69,7 +69,7 @@ class NodeUnorderedTest extends TestCase
 
     protected function deleteClosure(int $id): void
     {
-        if (phpversion() >= '8.1') {
+        if (version_compare(phpversion(), '8.0', '>=')) {
             DB::table('node_mock_closures')->where('ancestor_id', '=', $id)->delete();
         }
     }
