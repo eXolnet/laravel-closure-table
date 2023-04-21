@@ -13,6 +13,9 @@ jobs:
         laravel: [9.*, 10.*]
         dependency-version: [prefer-lowest, prefer-stable]
         exclude:
+          - php: 8.2
+            laravel: 9.*
+            dependency-version: prefer-lowest
           - php: 8.0
             laravel: 10.*
         include:
@@ -20,6 +23,10 @@ jobs:
             testbench: 7.*
           - laravel: 10.*
             testbench: 8.*
+          - php: 8.2
+            laravel: ^9.52
+            testbench: 7.*
+            dependency-version: prefer-lowest
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
