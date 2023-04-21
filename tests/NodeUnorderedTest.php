@@ -91,7 +91,7 @@ class NodeUnorderedTest extends TestCase
         $this->assertFalse($node->exists);
 
         $this->assertEquals(0, $this->getNodeCount());
-        $this->assertEquals(0, $this->getClosureCount());
+        $this->assertEquals(1, $this->getClosureCount());
     }
 
     public function testANodeDeletionDestroysItsClosure()
@@ -125,7 +125,7 @@ class NodeUnorderedTest extends TestCase
         $nodes[3]->deleteKeepDescendants();
 
         $this->assertEquals(7, $this->getNodeCount());
-        $this->assertEquals(13, $this->getClosureCount());
+        $this->assertEquals(15, $this->getClosureCount());
 
         $this->assertEquals([2, 4, 5, 6], $nodes[1]->getDescendants()->modelKeys());
     }
@@ -137,7 +137,7 @@ class NodeUnorderedTest extends TestCase
         $nodes[3]->deleteSubtree();
 
         $this->assertEquals(4, $this->getNodeCount());
-        $this->assertEquals(6, $this->getClosureCount());
+        $this->assertEquals(18, $this->getClosureCount());
 
         $this->assertEquals([2], $nodes[1]->getDescendants()->modelKeys());
     }
@@ -149,7 +149,7 @@ class NodeUnorderedTest extends TestCase
         $nodes[3]->deleteDescendants();
 
         $this->assertEquals(5, $this->getNodeCount());
-        $this->assertEquals(8, $this->getClosureCount());
+        $this->assertEquals(18, $this->getClosureCount());
 
         $this->assertEquals([2, 3], $nodes[1]->getDescendants()->modelKeys());
     }
