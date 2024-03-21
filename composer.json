@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/database": "^9.0|^10.0"
+        "illuminate/database": "11.0.8"
     },
     "require-dev": {
         "exolnet/phpcs-config": "^2.0",
