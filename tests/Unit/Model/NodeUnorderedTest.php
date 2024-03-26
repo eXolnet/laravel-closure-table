@@ -4,9 +4,9 @@ namespace Exolnet\ClosureTable\Tests\Unit\Model;
 
 use Exolnet\ClosureTable\Models\NodeUnordered;
 use Exolnet\ClosureTable\Tests\Mocks\NodeMock;
-use Exolnet\ClosureTable\Tests\Unit\UnitTest;
+use Exolnet\ClosureTable\Tests\Unit\UnitTestCase;
 
-class NodeUnorderedTest extends UnitTest
+class NodeUnorderedTest extends UnitTestCase
 {
     /**
      * @var \Exolnet\ClosureTable\Tests\Mocks\NodeMock
