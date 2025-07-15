@@ -26,42 +26,42 @@ class NodeOrderedTest extends UnitTestCase
     public function testMoveAsFirstChildThrowsExceptionForNonExistentNodes()
     {
         $this->expectException(\Exolnet\ClosureTable\Exceptions\MoveNotPossibleException::class);
-        
+
         $parent = new NodeOrderedMock();
         $child = new NodeOrderedMock();
-        
+
         $child->moveAsFirstChild($parent);
     }
 
     public function testMoveAsLastChildThrowsExceptionForNonExistentNodes()
     {
         $this->expectException(\Exolnet\ClosureTable\Exceptions\MoveNotPossibleException::class);
-        
+
         $parent = new NodeOrderedMock();
         $child = new NodeOrderedMock();
-        
+
         $child->moveAsLastChild($parent);
     }
 
     public function testMoveAsFirstChildThrowsExceptionForSameNode()
     {
         $this->expectException(\Exolnet\ClosureTable\Exceptions\SameNodeException::class);
-        
+
         $node = new NodeOrderedMock();
         $node->id = 1; // Simulate existing node
         $node->exists = true; // Mark as existing
-        
+
         $node->moveAsFirstChild($node);
     }
 
     public function testMoveAsLastChildThrowsExceptionForSameNode()
     {
         $this->expectException(\Exolnet\ClosureTable\Exceptions\SameNodeException::class);
-        
+
         $node = new NodeOrderedMock();
         $node->id = 1; // Simulate existing node
         $node->exists = true; // Mark as existing
-        
+
         $node->moveAsLastChild($node);
     }
 

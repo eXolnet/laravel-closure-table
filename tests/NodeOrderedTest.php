@@ -146,7 +146,8 @@ class NodeOrderedTest extends TestCase
 
     public function testMoveAsFirstChildWithRootLevelNode()
     {
-        // This specifically tests the issue: "Unable to move a node as first child or last child when this node is on the root level of the tree"
+        // This specifically tests the issue: "Unable to move a node as first child or last child
+        // when this node is on the root level of the tree"
         $parent = $this->generateNode('parent');
         $rootNode = $this->generateNode('root_node'); // This starts as a root node
 
@@ -166,7 +167,8 @@ class NodeOrderedTest extends TestCase
 
     public function testMoveAsLastChildWithRootLevelNode()
     {
-        // This specifically tests the issue: "Unable to move a node as first child or last child when this node is on the root level of the tree"
+        // This specifically tests the issue: "Unable to move a node as first child or last child
+        // when this node is on the root level of the tree"
         $parent = $this->generateNode('parent');
         $rootNode = $this->generateNode('root_node'); // This starts as a root node
 
@@ -225,7 +227,7 @@ class NodeOrderedTest extends TestCase
         $child1 = $this->generateNode('child1');
         $child2 = $this->generateNode('child2');
         $child3 = $this->generateNode('child3');
-        
+
         // Add children in specific order
         $child2->moveAsLastChild($root);
         $child1->moveAsFirstChild($root);
@@ -240,5 +242,73 @@ class NodeOrderedTest extends TestCase
         // Verify positions are in ascending order
         $this->assertLessThan($children[1]->position, $children[0]->position);
         $this->assertLessThan($children[2]->position, $children[1]->position);
+    }
+
+    public function testMoveAsFirstChildOnSameParent()
+    {
+        // Test moving a child to first position when it's already a child of the same parent
+        $parent = $this->generateNode('parent');
+        $child1 = $this->generateNode('child1');
+        $child2 = $this->generateNode('child2');
+
+        $child1->moveAsLastChild($parent);
+        $child2->moveAsLastChild($parent);
+
+        // Verify initial order
+        $children = $parent->fresh()->children()->orderBy('position')->get();
+        $this->assertEquals('child1', $children[0]->name);
+        $this->assertEquals('child2', $children[1]->name);
+
+        // Move child2 to first position
+        $child2->moveAsFirstChild($parent);
+
+        // Verify new order
+        $children = $parent->fresh()->children()->orderBy('position')->get();
+        $this->assertEquals('child2', $children[0]->name);
+        $this->assertEquals('child1', $children[1]->name);
+    }
+
+    public function testMoveAsLastChildOnSameParent()
+    {
+        // Test moving a child to last position when it's already a child of the same parent
+        $parent = $this->generateNode('parent');
+        $child1 = $this->generateNode('child1');
+        $child2 = $this->generateNode('child2');
+
+        $child1->moveAsFirstChild($parent);
+        $child2->moveAsFirstChild($parent);
+
+        // Verify initial order
+        $children = $parent->fresh()->children()->orderBy('position')->get();
+        $this->assertEquals('child2', $children[0]->name);
+        $this->assertEquals('child1', $children[1]->name);
+
+        // Move child2 to last position
+        $child2->moveAsLastChild($parent);
+
+        // Verify new order
+        $children = $parent->fresh()->children()->orderBy('position')->get();
+        $this->assertEquals('child1', $children[0]->name);
+        $this->assertEquals('child2', $children[1]->name);
+    }
+
+    public function testMovingNodeBetweenDifferentParents()
+    {
+        // Test moving a node from one parent to another
+        $parent1 = $this->generateNode('parent1');
+        $parent2 = $this->generateNode('parent2');
+        $child = $this->generateNode('child');
+
+        // First, make child a child of parent1
+        $child->moveAsFirstChild($parent1);
+        $this->assertEquals($parent1->id, $child->fresh()->getParent()->id);
+        $this->assertEquals(1, $parent1->fresh()->countChildren());
+        $this->assertEquals(0, $parent2->fresh()->countChildren());
+
+        // Then, move child to parent2
+        $child->moveAsLastChild($parent2);
+        $this->assertEquals($parent2->id, $child->fresh()->getParent()->id);
+        $this->assertEquals(0, $parent1->fresh()->countChildren());
+        $this->assertEquals(1, $parent2->fresh()->countChildren());
     }
 }
