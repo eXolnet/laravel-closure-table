@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/eXolnet/laravel-closure-table/v/stable?format=flat-square)](https://packagist.org/packages/eXolnet/laravel-closure-table)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Build Status](https://img.shields.io/travis/eXolnet/laravel-closure-table/master.svg?style=flat-square)](https://travis-ci.org/eXolnet/laravel-closure-table)
+[![Build Status](https://img.shields.io/travis/eXolnet/laravel-closure-table/main.svg?style=flat-square)](https://travis-ci.org/eXolnet/laravel-closure-table)
 [![Total Downloads](https://img.shields.io/packagist/dt/eXolnet/laravel-closure-table.svg?style=flat-square)](https://packagist.org/packages/eXolnet/laravel-closure-table)
 
 Closure Table database design pattern implementation for Laravel framework.
